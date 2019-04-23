@@ -77,6 +77,8 @@ local level1Text
 local alreadyClickedAnswer = false
 
 
+
+
 -----------------------------------------------------------------------------------------
 -- SOUND
 -----------------------------------------------------------------------------------------
@@ -150,6 +152,7 @@ local function RestartScene()
 
     alreadyClickedAnswer = false
     correct.isVisible = false
+    incorrect.isVisible = false
 
     livesText.text = "Number of lives = " .. tostring(lives)
     numberCorrectText.text = "Number correct = " .. tostring(numberCorrect)
@@ -196,10 +199,13 @@ local function TouchListenerWrongAnswer1(touch)
 
 
         if (answer ~= tonumber(userAnswer)) then
+            incorrect.isVisible = true
             -- decrease a life
-            lives = lives - 1
+            lives = lives + 1
             -- call RestartScene after 1 second
-            timer.performWithDelay( 1000, RestartScene )            
+            
+            timer.performWithDelay( 1000, RestartScene )   
+
         end        
 
     end
@@ -214,8 +220,8 @@ local function TouchListenerWrongAnswer2(touch)
 
             alreadyClickedAnswer = true
 
-
             if (answer ~= tonumber(userAnswer)) then
+                incorrect.isVisible = true
                 -- decrease a life
                 lives = lives - 1
                 -- call RestartScene after 1 second
@@ -225,12 +231,32 @@ local function TouchListenerWrongAnswer2(touch)
         end
 end
     
+    local function TouchListenerWrongAnswer3(touch)
+    -- get the user answer from the text object that was clicked on
+    local userAnswer = wrongAnswer3TextObject.text
+
+      
+        if (touch.phase == "ended") and (alreadyClickedAnswer == false) then
+
+            alreadyClickedAnswer = true
+
+            if (answer ~= tonumber(userAnswer)) then
+                incorrect.isVisible = true
+                -- decrease a life
+                lives = lives - 1
+                -- call RestartScene after 1 second
+                timer.performWithDelay( 1000, RestartScene )            
+            end        
+    
+        end
+end
 -- Function that adds the touch listeners to each of the answer objects
 local function AddTextObjectListeners()
 
     answerTextObject:addEventListener("touch", TouchListenerAnswer)
     wrongAnswer1TextObject:addEventListener("touch", TouchListenerWrongAnswer1)
     wrongAnswer2TextObject:addEventListener("touch", TouchListenerWrongAnswer2)
+    wrongAnswer3TextObject:addEventListener("touch", TouchListenerWrongAnswer3)
 
 end
 
@@ -240,6 +266,7 @@ local function RemoveTextObjectListeners()
     answerTextObject:removeEventListener("touch", TouchListenerAnswer)
     wrongAnswer1TextObject:removeEventListener("touch", TouchListenerWrongAnswer1)
     wrongAnswer2TextObject:removeEventListener("touch", TouchListenerWrongAnswer2)
+    wrongAnswer3TextObject:removeEventListener("touch", TouchListenerWrongAnswer3)
 
 end
 
@@ -278,6 +305,7 @@ function scene:create( event )
     answerTextObject = display.newText("", display.contentWidth*.4, display.contentHeight/2, nil, 50 )
     wrongAnswer1TextObject = display.newText("", display.contentWidth*.3, display.contentHeight/2, nil, 50 )
     wrongAnswer2TextObject = display.newText("", display.contentWidth*.2, display.contentHeight/2, nil, 50 )
+    wrongAnswer3TextObject = display.newText("", display.contentWidth*.1, display.contentHeight/2, nil, 50 )
     numberCorrectText = display.newText("", display.contentWidth*4/5, display.contentHeight*6/7, nil, 25)
 
     -- create the text object that will hold the number of lives
@@ -289,9 +317,14 @@ function scene:create( event )
     congratulationText.isVisible = false
 
     -- create the text object that will say Correct, set the colour and then hide it
-    correct = display.newText("Correct", display.contentWidth/2, display.contentHeight*1/3, nil, 50 )
+    correct = display.newText("Correct", display.contentWidth/2, display.contentHeight*2/5, nil, 50 )
     correct:setTextColor(100/255, 47/255, 210/255)
     correct.isVisible = false
+
+    incorrect = display.newText("incorrect!", display.contentWidth/2, display.contentHeight*2/5, nil, 50 )
+    incorrect:setTextColor(100/255, 47/255, 210/255)
+    incorrect.isVisible = false
+
 
     -- create the text object that will say Out of Time, set the colour and then hide it
     outOfTimeText = display.newText("Out of Time!", display.contentWidth*2/5, display.contentHeight*1/3, nil, 50)
@@ -310,6 +343,7 @@ function scene:create( event )
     sceneGroup:insert( answerTextObject )
     sceneGroup:insert( wrongAnswer1TextObject )
     sceneGroup:insert( wrongAnswer2TextObject )
+    sceneGroup:insert( wrongAnswer3TextObject )
     sceneGroup:insert( congratulationText )
     sceneGroup:insert( correct )
     sceneGroup:insert( level1Text )
