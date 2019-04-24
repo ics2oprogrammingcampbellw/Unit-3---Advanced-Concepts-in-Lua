@@ -56,11 +56,13 @@ local heart1
 local heart2
 local numLives = 2
 
+local lArrow 
 local rArrow 
 local uArrow
 
 local motionx = 0
 local SPEED = 5
+local SPEED1 = -5
 local LINEAR_VELOCITY = -100
 local GRAVITY = 7
 
@@ -70,6 +72,7 @@ local floor
 
 local ball1
 local ball2
+local ball3
 local theBall
 
 local questionsAnswered = 0
@@ -91,6 +94,11 @@ local function up (touch)
     end
 end
 
+local function left (touch)
+    motionx = SPEED1
+    character.xScale = 1
+end
+
 -- Move character horizontally
 local function movePlayer (event)
     character.x = character.x + motionx
@@ -105,11 +113,13 @@ end
 
 
 local function AddArrowEventListeners()
+    lArrow:addEventListener("touch", left)
     rArrow:addEventListener("touch", right)
     uArrow:addEventListener("touch", up)
 end
 
 local function RemoveArrowEventListeners()
+    lArrow:addEventListener("touch", left)
     rArrow:removeEventListener("touch", right)
     uArrow:removeEventListener("touch", up)
 end
@@ -152,6 +162,7 @@ end
 local function MakeSoccerBallsVisible()
     ball1.isVisible = true
     ball2.isVisible = true
+    ball3.isVisible = true
 end
 
 local function MakeHeartsVisible()
@@ -250,6 +261,8 @@ local function AddCollisionListeners()
     ball1:addEventListener( "collision" )
     ball2.collision = onCollision
     ball2:addEventListener( "collision" )
+    ball3.collision = onCollision
+    ball3:addEventListener( "collision" )
 
     door.collision = onCollision
     door:addEventListener( "collision" )
@@ -288,6 +301,8 @@ local function AddPhysicsBodies()
 
     physics.addBody(ball1, "static",  {density=0, friction=0, bounce=0} )
     physics.addBody(ball2, "static",  {density=0, friction=0, bounce=0} )
+    physics.addBody(ball3, "static",  {density=0, friction=0, bounce=0} )
+
 
     physics.addBody(door, "static", {density=1, friction=0.3, bounce=0.2})
 
@@ -463,6 +478,15 @@ function scene:create( event )
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( uArrow)
 
+    --Insert the left arrow
+    lArrow = display.newImageRect("Images/LeftArrowUnpressed.png", 100, 50)
+    lArrow.x = display.contentWidth * 7.2 / 10
+    lArrow.y = display.contentHeight * 9.5 / 10
+
+    sceneGroup:insert( lArrow)
+
+
+
     --WALLS--
     leftW = display.newLine( 0, 0, 0, display.contentHeight)
     leftW.isVisible = true
@@ -507,6 +531,18 @@ function scene:create( event )
 
     -- Insert objects into the scene group in order to ONLY be associated with this scene
     sceneGroup:insert( ball2 )
+
+
+
+   --ball3
+    ball3 = display.newImageRect ("Images/SoccerBall.png", 70, 70)
+    ball3.x = 490
+    ball3.y = 730
+    ball3.myName = "ball3"
+
+    -- Insert objects into the scene group in order to ONLY be associated with this scene
+    sceneGroup:insert( ball3 )
+
 
 end --function scene:create( event )
 
