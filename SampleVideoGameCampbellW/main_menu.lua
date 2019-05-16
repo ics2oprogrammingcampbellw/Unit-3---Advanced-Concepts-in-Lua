@@ -5,6 +5,7 @@
 -- Date: Month Day, Year
 -- Description: This is the main menu, displaying the credits, instructions & play buttons.
 -----------------------------------------------------------------------------------------
+display.setStatusBar(display.HiddenStatusBar)
 
 -----------------------------------------------------------------------------------------
 -- INITIALIZATIONS
@@ -54,8 +55,8 @@ local function Level1ScreenTransition( )
 end    
 
 -- INSERT LOCAL FUNCTION DEFINITION THAT GOES TO INSTRUCTIONS SCREEN 
-local function InstuctionsTransition( )
-    composer.gotoScene( "Instructions Screen", {effect = "slideUp", time = 1000})
+local function InstructionsTransition( )
+    composer.gotoScene( "instructions_screen", {effect = "slideUp", time = 1000})
 end    
 
 -----------------------------------------------------------------------------------------
@@ -94,8 +95,8 @@ function scene:create( event )
     playButton = widget.newButton( 
         {   
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth/2,
-            y = display.contentHeight*7/8,
+            x = display.contentWidth*1/2,
+            y = display.contentHeight*1/3,
 
             -- Insert the images here
             defaultFile = "Images/Start Button Unpressed.png",
@@ -111,7 +112,7 @@ function scene:create( event )
     creditsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth*7/8,
+            x = display.contentWidth*4/8,
             y = display.contentHeight*7/8,
 
             -- Insert the images here
@@ -126,15 +127,15 @@ function scene:create( event )
     instructionsButton = widget.newButton( 
         {
             -- Set its position on the screen relative to the screen size
-            x = display.contentWidth*2/8,
-            y = display.contentHeight*7/8,
+            x = display.contentWidth*1/2,
+            y = display.contentHeight*3/5,
 
             -- Insert the images here
             defaultFile = "Images/Instructions Button Unpressed.png",
             overFile = "Images/Instructions Button Pressed.png",
 
             -- When the button is released, call the Credits transition function
-            onRelease = InstuctionsTransition
+            onRelease = InstructionsTransition
         } ) 
 
     -- Associating button widgets with this scene

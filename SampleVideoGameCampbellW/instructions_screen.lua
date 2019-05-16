@@ -76,6 +76,8 @@ function scene:create( event )
         -- Setting Position
         x = display.contentWidth*1/8,
         y = display.contentHeight*15/16,
+        width=200,
+        height=100,
 
         -- Setting Dimensions
         -- width = 1000,
